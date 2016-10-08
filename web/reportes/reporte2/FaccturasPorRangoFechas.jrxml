@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a46073f-6c19-46b2-8085-38868e08485f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FechaInicial" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2016-06-01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FechaFinal" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2016-06-07"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select f.ID_FACTURA, e.NOMBRE, f.FECHA, 
+    (select sum((df.PRECIO * df.CANTIDAD) + df.IVA) 
+     from detalle_factura df 
+     where df.ID_FACTURA = f.ID_FACTURA) as monto
+from factura f
+inner join empleado e on f.ID_EMPLEADO = e.ID_EMPLEADO
+where f.fecha between $P{FechaInicial} and $P{FechaFinal}
+order by f.FECHA, e.nombre]]>
+	</queryString>
+	<field name="ID_FACTURA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FECHA" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="67" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="37" width="555" height="20" uuid="6b696ad3-92ef-450b-8c5a-2c4e6707b4e7"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Facturas por Rango de Fechas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="4" y="3" width="551" height="20" forecolor="#FFFFFF" backcolor="#3333FF" uuid="9a349e7b-1ab6-47fe-9a82-3bed530663af"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[TELEFONOS CELULARES IZEL S.A. DE C.V]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="58" y="0" width="83" height="20" uuid="414b04d5-e37a-4f84-8e14-14da953d70b1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº_FACTURA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="0" width="100" height="20" uuid="4f6658d0-e210-4bc8-80ce-83aab085a448"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VENDEDOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="0" width="100" height="20" uuid="9f38123a-c52e-4fa3-8013-14806c0d73a7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="0" width="100" height="20" uuid="f08d2890-ae42-4e04-a753-f3cd0a811390"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="58" y="24" width="429" height="1" uuid="1cbce9b3-bcbb-4047-9c1b-a1f47f234c95"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="58" y="0" width="83" height="20" uuid="3809bc5b-8e73-43fd-b4bd-00cb01dda800"/>
+				<textFieldExpression><![CDATA[$F{ID_FACTURA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="0" width="144" height="20" uuid="a2730e10-3448-4b2b-a014-25c6fbb6e3ed"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="287" y="0" width="100" height="20" uuid="b663c2e3-025c-4703-ac09-6e0ca46f202d"/>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="387" y="0" width="100" height="20" uuid="544ff6f1-030d-4b52-91e5-f32a2a276cc9"/>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
